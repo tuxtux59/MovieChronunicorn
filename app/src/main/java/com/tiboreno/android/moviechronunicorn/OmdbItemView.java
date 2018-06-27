@@ -2,11 +2,16 @@ package com.tiboreno.android.moviechronunicorn;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,11 +38,20 @@ public class OmdbItemView extends RelativeLayout {
         initializeView();
     }
 
+    public OmdbItemView(Context context, OmdbItem item) {
+        super(context);
+        mContext = context;
+        initializeView();
+        setItem(item);
+    }
+
     public OmdbItemView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
         mAttrs = attrs;
         initializeView();
+        invalidate();
+        requestLayout();
     }
     private void initializeView() {
         if (mContext == null) {
@@ -54,15 +68,28 @@ public class OmdbItemView extends RelativeLayout {
 
     public void setItem(OmdbItem omdbItem){
         initializeView();
-        omdbTitleTv.setText(omdbItem.getTitle());
+        String title = omdbItem.getTitle();
+        Log.d("titletv", String.valueOf(omdbTitleTv == null));
+        Log.d("title tv", omdbTitleTv.getText().toString());
+        omdbTitleTv.setText(title);
+        Log.d("title tv", omdbTitleTv.getText().toString());
         Date releaseDate = omdbItem.getFormattedReleased();
         Calendar c = Calendar.getInstance();
         c.setTime(releaseDate);
         c.add(Calendar.YEAR, 2);
         Date availableDate = c.getTime();
-        omdbDescTv.setText(String.format("%s > %s", omdbItem.getReleased(), new SimpleDateFormat(OmdbItem.date_format).format(availableDate)));
-        //Glide.with(mContext).load(omdbItem.getPoster()).into(omdbPosterImv);
+        String desc = String.format("%s > %s", omdbItem.getReleased(), new SimpleDateFormat(OmdbItem.date_format).format(availableDate));
+        Log.d("desctv", String.valueOf(omdbDescTv == null));
+        omdbDescTv.setText(desc);
+        Picasso.with(mContext)
+                .load(omdbItem.getPoster())
+                .placeholder(R.drawable.ic_home_black_24dp)
+                .error(R.drawable.ic_home_black_24dp)
+                .into(omdbPosterImv);
 
+        Toast.makeText(mContext, omdbItem.getTitle(), Toast.LENGTH_SHORT).show();
+        this.invalidate();
+        this.requestLayout();
     }
 
 }

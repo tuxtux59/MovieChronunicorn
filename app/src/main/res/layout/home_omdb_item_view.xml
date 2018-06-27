@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     style="@style/Theme.AppCompat"
+    android:minHeight="150dp"
     android:theme="@style/Theme.AppCompat"
+    android:background="#C0C0C0"
     android:elevation="4dp"
     android:layout_margin="8dp">
 
@@ -18,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:scaleType="fitXY"
+        android:background="#3C3C3C"
          />
 
     <RelativeLayout
@@ -33,6 +36,7 @@
             android:id="@+id/omdb_title_tv"
             android:layout_alignParentTop="true"
             android:textSize="30sp"
+            android:text="Title"
             />
 
         <TextView
@@ -40,6 +44,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/omdb_desc_tv"
             android:layout_below="@+id/omdb_title_tv"
+            android:text="Desc"
             />
 
     </RelativeLayout>

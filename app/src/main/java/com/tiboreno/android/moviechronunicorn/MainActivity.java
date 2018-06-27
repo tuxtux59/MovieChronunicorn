@@ -2,17 +2,23 @@ package com.tiboreno.android.moviechronunicorn;
 
 import android.app.Activity;
 import android.os.Bundle;
+
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class MainActivity extends Activity {
-    private RecyclerView recyclerView;
+
+    private OmdbItemView mView;
     /*private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
         R.id.navigation_home -> {
@@ -34,29 +40,23 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        mView = findViewById(R.id.mOmdView);
         OmdbAPI.ServiceApi mclient = OmdbAPI.getDefault(getApplicationContext()).mClient;
-        String[] tests = new String[]{"Blade Runner", "Interstellar", "Blade Runner 2049"};
-        for(String title : tests){
-            mclient.getItemByTItle(title, new Callback<OmdbItem>() {
-                @Override
-                public void success(OmdbItem omdbItem, Response response) {
-                    String msg = omdbItem.toString().concat(omdbItem.getFormattedReleased().toString());
-                            Log.d("full", msg);
-                            Log.d("date", omdbItem.getFormattedReleased().toString());
-                    Toast.makeText(MainActivity.this, omdbItem.getTitle(), Toast.LENGTH_SHORT).show();
-                    OmdbItemView view = new OmdbItemView(getApplicationContext());
-                    view.setItem(omdbItem);
-                    recyclerView.addView(view);
-                }
+        final String[] tests = new String[]{"Blade Runner", "Interstellar", "Blade Runner 2049", "Realive"};
+        final ArrayList<OmdbItem> items = new ArrayList<>();
+        mclient.getItemByTItle(tests[1], new Callback<OmdbItem>() {
+            @Override
+            public void success(OmdbItem omdbItem, Response response) {
+                mView.setItem(omdbItem);
+            }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    Toast.makeText(MainActivity.this, error.getResponse().toString(), Toast.LENGTH_SHORT).show();
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(MainActivity.this, error.getResponse().toString(), Toast.LENGTH_SHORT).show();
 
-                }
-            });
-        }
+            }
+        });
+
 
     }
 }
